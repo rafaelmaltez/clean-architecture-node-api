@@ -11,7 +11,9 @@
     "test:ci": "npm test -- --coverage"
   },
   "standard": {
-    "env": ["jest"]
+    "env": [
+      "jest"
+    ]
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,7 @@
     "standard": "^17.0.0"
   },
   "dependencies": {
-    "husky": "^4.3.8"
+    "husky": "^4.3.8",
+    "validator": "^13.7.0"
   }
 }
