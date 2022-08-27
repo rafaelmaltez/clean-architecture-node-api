@@ -1,6 +1,6 @@
-const MongoHelper = require('./helpers/mongo-helper')
+const MongoHelper = require('../helpers/mongo-helper')
 const LoadUserByEmailRepository = require('./load-user-by-email-repository')
-const { MissingParamError } = require('../utils/errors')
+const { MissingParamError } = require('../../utils/errors')
 let db
 
 const makeSut = () => {
