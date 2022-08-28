@@ -4,7 +4,7 @@ module.exports = {
   async connect (uri, dbName) {
     this.uri = uri
     this.dbName = dbName
-    this.client = await MongoClient.connect(process.env.MONGO_URL, {
+    this.client = await MongoClient.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
