@@ -124,19 +124,6 @@ describe('Login router', () => {
     expect(httpResponse.statusCode).toBe(401)
     expect(httpResponse.body).toEqual(new UnauthorizedError())
   })
-  test('Should return 500 if AuthUSeCase throws', async () => {
-    const authUseCase = makeAuthUseCaseWithError()
-    const sut = new LoginRouter({ authUseCase })
-    const httpRequest = {
-      body: {
-        email: 'any_email@email.com',
-        password: 'any_password'
-      }
-    }
-    const httpResponse = await sut.route(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
-  })
   test('Should return 200 if valid credentials are provided', async () => {
     const { sut, authUseCase } = makeSut()
     const httpRequest = {
@@ -149,20 +136,7 @@ describe('Login router', () => {
     expect(httpResponse.statusCode).toBe(200)
     expect(httpResponse.body.accessToken).toEqual(authUseCase.accessToken)
   })
-  test('Should return 500 if EmailValidator throws', async () => {
-    const authUseCase = makeAuthUseCase()
-    const emailValidator = makeEmailValidatorWithError()
-    const sut = new LoginRouter({ authUseCase, emailValidator })
-    const httpRequest = {
-      body: {
-        email: 'any_email@email.com',
-        password: 'any_password'
-      }
-    }
-    const httpResponse = await sut.route(httpRequest)
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
-  })
+
   test('Should call AuthUseCase with correct email', async () => {
     const { sut, emailValidator } = makeSut()
     const httpRequest = {
@@ -189,6 +163,29 @@ describe('Login router', () => {
       new LoginRouter({
         authUseCase,
         emailValidator: invalid
+      })
+    )
+    for (const sut of suts) {
+      const httpRequest = {
+        body: {
+          email: 'any_email@email.com',
+          password: 'any_password'
+        }
+      }
+      const httpResponse = await sut.route(httpRequest)
+      expect(httpResponse.statusCode).toBe(500)
+      expect(httpResponse.body).toEqual(new ServerError())
+    }
+  })
+  test('Should throw if any dependency throws', async () => {
+    const authUseCase = makeAuthUseCase()
+    const suts = [].concat(
+      new LoginRouter({
+        authUseCase: makeAuthUseCaseWithError()
+      }),
+      new LoginRouter({
+        authUseCase,
+        emailValidator: makeEmailValidatorWithError()
       })
     )
     for (const sut of suts) {
