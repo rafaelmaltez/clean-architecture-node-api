@@ -15,10 +15,10 @@ module.exports = {
     this.client = null
     this.db = null
   },
-  async getDb () {
+  async getCollection (name) {
     if (!this.client || !this.db) {
       await this.connect(process.env.MONGO_URL, this.dbName)
     }
-    return this.db
+    return this.db.collection(name)
   }
 }
