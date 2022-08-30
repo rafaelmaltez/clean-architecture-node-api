@@ -1,3 +1,5 @@
+const loginRouter = require('../composers/login-router.composer')
+
 module.exports = router => {
-  router.get('/login', (req, res) => res.send('dynamic file require ok'))
+  router.post('/login', loginRouter)
 }
